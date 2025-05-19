@@ -1,0 +1,14 @@
+# Never sync these to public repo
+.env
+*.log
+*.key
+*.pem
+vault/
+__pycache__/
+*.db
+tokens/
+notes/
+grafana_api.key
+*.env
+*.sqlite
+system_updates.log
