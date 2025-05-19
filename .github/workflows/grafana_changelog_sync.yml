@@ -1,0 +1,30 @@
+name: 📤 Update Grafana Changelog Panel
+
+on:
+  schedule:
+    - cron: '15 2 * * 0'  # Every Sunday at 2:15 AM UTC
+  workflow_dispatch:      # Manual trigger
+
+jobs:
+  update-grafana-panel:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: 🔐 Load secrets and set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: 🧪 Install dependencies
+        run: pip install python-dotenv requests
+
+      - name: 📤 Run changelog sync
+        env:
+          GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
+          GRAFANA_DASHBOARD_UID: ${{ secrets.GRAFANA_DASHBOARD_UID }}
+          GRAFANA_PANEL_ID: ${{ secrets.GRAFANA_PANEL_ID }}
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+        run: python grafana_sync_changelog.py
