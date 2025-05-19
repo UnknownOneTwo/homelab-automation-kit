@@ -1,0 +1,27 @@
+name: 🔄 Weekly Public Sync
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'  # Every Sunday at 2 AM UTC
+  workflow_dispatch:      # Allow manual triggering
+
+jobs:
+  sanitize-and-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: 🧼 Sanitize Files
+        run: |
+          python sanitize_for_public.py
+
+      - name: 📤 Commit & Push Changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "🤖 Weekly sanitized sync"
+          git push
+        continue-on-error: true
